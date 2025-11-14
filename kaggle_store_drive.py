@@ -1,32 +1,31 @@
-import os
-import shutil
+# ============================================
+# 1. Mount Google Drive
+# ============================================
 from google.colab import drive
+drive.mount('/content/drive')
+
+# Create a folder in Google Drive to store dataset
+save_dir = "/content/drive/MyDrive/datasets/xxx-xxx"
+import os
+os.makedirs(save_dir, exist_ok=True)
+
+# ============================================
+# 2. Install kagglehub
+# ============================================
+!pip install -q kagglehub
+
+# ============================================
+# 3. Download dataset using kagglehub
+# ============================================
 import kagglehub
 
-# Download latest version
-path = kagglehub.dataset_download("xxx-xxx")
-print("Path to dataset files:", path)
+print("Downloading dataset...")
+dataset_path = kagglehub.dataset_download("xxx-xxx")
+print("Downloaded to:", dataset_path)
 
-# Define source and destination paths
-# 'path' variable holds the Kaggle dataset path from the previous step
-source_path = path
-drive_path = "/content/drive/MyDrive/xxx-xxx"
+# ============================================
+# 4. Copy dataset to Google Drive
+# ============================================
+!cp -r "{dataset_path}"/* "{save_dir}"
 
-# 'drive_path' variable holds the base Google Drive path
-# Create a specific folder for the dataset within the drive_path
-destination_folder_name = os.path.basename(source_path) # e.g., 'vietnamese-traffic-signs'
-destination_path = os.path.join(drive_path, destination_folder_name)
-
-print(f"Source dataset path: {source_path}")
-print(f"Destination Google Drive path: {destination_path}")
-
-# Copy the dataset to Google Drive
-if os.path.exists(destination_path):
-    print(f"Warning: Destination folder '{destination_path}' already exists. Skipping copy.")
-    print("If you want to overwrite, please manually delete the folder first and re-run.")
-else:
-    try:
-        shutil.copytree(source_path, destination_path)
-        print(f"Dataset successfully copied from '{source_path}' to '{destination_path}'")
-    except Exception as e:
-        print(f"Error copying dataset: {e}")
+print("Dataset copied to Google Drive at:", save_dir)
