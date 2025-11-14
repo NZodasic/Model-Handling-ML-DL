@@ -4,7 +4,7 @@ from google.colab import drive
 import kagglehub
 
 # Download latest version
-path = kagglehub.dataset_download("maitam/vietnamese-traffic-signs")
+path = kagglehub.dataset_download("xxx-xxx")
 print("Path to dataset files:", path)
 
 # Define source and destination paths
